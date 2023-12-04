@@ -3,6 +3,8 @@ const koa = require("koa");
 const app = new koa();
 const cors = require("koa2-cors");
 const variables = require("./src/config/variables");
+require("./src/modules/web/index");
+require("./src/modules/default");
 
 app.use(cors({
     origin: () => {
