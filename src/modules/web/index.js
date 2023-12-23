@@ -13,4 +13,17 @@ router.get("/jugador/get", koaBody(), async function (context) {
     };
 });
 
-module.exports = { router };
+/*router.post("/country", koaBody(), async function (context) {
+    try {
+        var body = context.request.body;
+        var header = context.request.body;
+        console.log(context);
+
+        //context.body = await db.getCountry();
+
+    } catch (error) {
+        context.body = { error: true, message: error.message };
+    };
+});*/
+
+module.exports = { router };    

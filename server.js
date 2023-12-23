@@ -33,7 +33,7 @@ app.use(async (context, next) => {
                 return true;
             };
 
-            const token = context.headers.easy_sports_key;
+            const token = context.headers.manufacture_key;
 
             let auth = getDecode(token);
 
