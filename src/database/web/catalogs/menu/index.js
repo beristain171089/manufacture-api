@@ -1,16 +1,16 @@
 const config = require("../../../config");
 const sql = require('mssql');
 
-async function getCountry(activos, countryId = 0, country = null) {
+async function getmenu(activos, menuId = 0, menu = null) {
     var activos
-    let query = "exec sp_web_countries_get @activated='" + activos + "', @countryId='" + countryId + "'";
-    if(country !=  null && country.trim() != '' ){
-        query += ", @country= '" + country + "'";
+    let query = "exec sp_web_menus_get @activated='" + activos + "', @menuId='" + menuId + "'";
+    if(menu !=  null && menu.trim() != '' ){
+        query += ", @menu= '" + menu + "'";
     }
     query +=  ";";
     try {
         const connection = await new sql.ConnectionPool(config).connect();
-        const countries = await connection
+        const menus = await connection
             .request()
             .query(query)
             .then((dbData) => {
@@ -24,18 +24,18 @@ async function getCountry(activos, countryId = 0, country = null) {
 
         connection.close();
 
-        return countries;
+        return menus;
 
     } catch (error) {
         return { error: true, message: error.message };
     };
 };
 
-async function addCountry(country) {
-    let query = await "exec sp_web_countries_add @country='" + country + "';";
+async function addmenu(menu) {
+    let query = await "exec sp_web_menus_add @menu='" + menu + "';";
     try {
         const connection = await new sql.ConnectionPool(config).connect();
-        const country = await connection
+        const menu = await connection
             .request()
             .query(query)
             .then((dbData) => {
@@ -48,18 +48,18 @@ async function addCountry(country) {
 
         connection.close();
 
-        return country;
+        return menu;
 
     } catch (error) {
         return { error: true, message: error.message };
     };
 };
 
-async function updateCountry(id, country, status) {
-    let query = await "exec sp_web_countries_update @id = '" + id + "', @country='" + country + "', @status='" + status + "';";
+async function updatemenu(id, menu, status) {
+    let query = await "exec sp_web_menus_update @id = '" + id + "', @menu='" + menu + "', @status='" + status + "';";
     try {
         const connection = await new sql.ConnectionPool(config).connect();
-        const country = await connection
+        const menu = await connection
             .request()
             .query(query)
             .then((dbData) => {
@@ -72,7 +72,7 @@ async function updateCountry(id, country, status) {
 
         connection.close();
 
-        return country;
+        return menu;
 
     } catch (error) {
         return { error: true, message: error.message };
@@ -80,7 +80,7 @@ async function updateCountry(id, country, status) {
 };
 
 module.exports = {
-    getCountry,
-    addCountry,
-    updateCountry
+    getMenu,
+    addMenu,
+    updateMenu
 };

@@ -1,16 +1,16 @@
 const config = require("../../../config");
 const sql = require('mssql');
 
-async function getCountry(activos, countryId = 0, country = null) {
+async function getworkshop(activos, workshopId = 0, workshop = null) {
     var activos
-    let query = "exec sp_web_countries_get @activated='" + activos + "', @countryId='" + countryId + "'";
-    if(country !=  null && country.trim() != '' ){
-        query += ", @country= '" + country + "'";
+    let query = "exec sp_web_workshops_get @activated='" + activos + "', @workshopId='" + workshopId + "'";
+    if(workshop !=  null && workshop.trim() != '' ){
+        query += ", @workshop= '" + workshop + "'";
     }
     query +=  ";";
     try {
         const connection = await new sql.ConnectionPool(config).connect();
-        const countries = await connection
+        const workshops = await connection
             .request()
             .query(query)
             .then((dbData) => {
@@ -24,18 +24,18 @@ async function getCountry(activos, countryId = 0, country = null) {
 
         connection.close();
 
-        return countries;
+        return workshops;
 
     } catch (error) {
         return { error: true, message: error.message };
     };
 };
 
-async function addCountry(country) {
-    let query = await "exec sp_web_countries_add @country='" + country + "';";
+async function addworkshop(workshop) {
+    let query = await "exec sp_web_workshops_add @workshop='" + workshop + "';";
     try {
         const connection = await new sql.ConnectionPool(config).connect();
-        const country = await connection
+        const workshop = await connection
             .request()
             .query(query)
             .then((dbData) => {
@@ -48,18 +48,18 @@ async function addCountry(country) {
 
         connection.close();
 
-        return country;
+        return workshop;
 
     } catch (error) {
         return { error: true, message: error.message };
     };
 };
 
-async function updateCountry(id, country, status) {
-    let query = await "exec sp_web_countries_update @id = '" + id + "', @country='" + country + "', @status='" + status + "';";
+async function updateworkshop(id, workshop, status) {
+    let query = await "exec sp_web_workshops_update @id = '" + id + "', @workshop='" + workshop + "', @status='" + status + "';";
     try {
         const connection = await new sql.ConnectionPool(config).connect();
-        const country = await connection
+        const workshop = await connection
             .request()
             .query(query)
             .then((dbData) => {
@@ -72,7 +72,7 @@ async function updateCountry(id, country, status) {
 
         connection.close();
 
-        return country;
+        return workshop;
 
     } catch (error) {
         return { error: true, message: error.message };
@@ -80,7 +80,7 @@ async function updateCountry(id, country, status) {
 };
 
 module.exports = {
-    getCountry,
-    addCountry,
-    updateCountry
+    getWorkshop,
+    addWorkshop,
+    updateWorkshop
 };

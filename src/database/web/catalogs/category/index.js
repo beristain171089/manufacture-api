@@ -1,16 +1,16 @@
 const config = require("../../../config");
 const sql = require('mssql');
 
-async function getCountry(activos, countryId = 0, country = null) {
+async function getcategory(activos, categoryId = 0, category = null) {
     var activos
-    let query = "exec sp_web_countries_get @activated='" + activos + "', @countryId='" + countryId + "'";
-    if(country !=  null && country.trim() != '' ){
-        query += ", @country= '" + country + "'";
+    let query = "exec sp_web_categories_get @activated='" + activos + "', @categoryId='" + categoryId + "'";
+    if(category !=  null && category.trim() != '' ){
+        query += ", @category= '" + category + "'";
     }
     query +=  ";";
     try {
         const connection = await new sql.ConnectionPool(config).connect();
-        const countries = await connection
+        const categories = await connection
             .request()
             .query(query)
             .then((dbData) => {
@@ -24,18 +24,18 @@ async function getCountry(activos, countryId = 0, country = null) {
 
         connection.close();
 
-        return countries;
+        return categories;
 
     } catch (error) {
         return { error: true, message: error.message };
     };
 };
 
-async function addCountry(country) {
-    let query = await "exec sp_web_countries_add @country='" + country + "';";
+async function addcategory(category) {
+    let query = await "exec sp_web_categories_add @category='" + category + "';";
     try {
         const connection = await new sql.ConnectionPool(config).connect();
-        const country = await connection
+        const category = await connection
             .request()
             .query(query)
             .then((dbData) => {
@@ -48,18 +48,18 @@ async function addCountry(country) {
 
         connection.close();
 
-        return country;
+        return category;
 
     } catch (error) {
         return { error: true, message: error.message };
     };
 };
 
-async function updateCountry(id, country, status) {
-    let query = await "exec sp_web_countries_update @id = '" + id + "', @country='" + country + "', @status='" + status + "';";
+async function updatecategory(id, category, status) {
+    let query = await "exec sp_web_categories_update @id = '" + id + "', @category='" + category + "', @status='" + status + "';";
     try {
         const connection = await new sql.ConnectionPool(config).connect();
-        const country = await connection
+        const category = await connection
             .request()
             .query(query)
             .then((dbData) => {
@@ -72,7 +72,7 @@ async function updateCountry(id, country, status) {
 
         connection.close();
 
-        return country;
+        return category;
 
     } catch (error) {
         return { error: true, message: error.message };
@@ -80,7 +80,7 @@ async function updateCountry(id, country, status) {
 };
 
 module.exports = {
-    getCountry,
-    addCountry,
-    updateCountry
+    getCategory,
+    addCategory,
+    updateCategory
 };

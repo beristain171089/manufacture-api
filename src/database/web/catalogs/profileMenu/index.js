@@ -1,16 +1,16 @@
 const config = require("../../../config");
 const sql = require('mssql');
 
-async function getCountry(activos, countryId = 0, country = null) {
+async function getprofileMenu(activos, profileMenuId = 0, profileMenu = null) {
     var activos
-    let query = "exec sp_web_countries_get @activated='" + activos + "', @countryId='" + countryId + "'";
-    if(country !=  null && country.trim() != '' ){
-        query += ", @country= '" + country + "'";
+    let query = "exec sp_web_profile_menus_get @activated='" + activos + "', @profileMenuId='" + profileMenuId + "'";
+    if(profileMenu !=  null && profileMenu.trim() != '' ){
+        query += ", @profileMenu= '" + profileMenu + "'";
     }
     query +=  ";";
     try {
         const connection = await new sql.ConnectionPool(config).connect();
-        const countries = await connection
+        const profile_menus = await connection
             .request()
             .query(query)
             .then((dbData) => {
@@ -24,18 +24,18 @@ async function getCountry(activos, countryId = 0, country = null) {
 
         connection.close();
 
-        return countries;
+        return profile_menus;
 
     } catch (error) {
         return { error: true, message: error.message };
     };
 };
 
-async function addCountry(country) {
-    let query = await "exec sp_web_countries_add @country='" + country + "';";
+async function addprofileMenu(profileMenu) {
+    let query = await "exec sp_web_profile_menus_add @profileMenu='" + profileMenu + "';";
     try {
         const connection = await new sql.ConnectionPool(config).connect();
-        const country = await connection
+        const profileMenu = await connection
             .request()
             .query(query)
             .then((dbData) => {
@@ -48,18 +48,18 @@ async function addCountry(country) {
 
         connection.close();
 
-        return country;
+        return profileMenu;
 
     } catch (error) {
         return { error: true, message: error.message };
     };
 };
 
-async function updateCountry(id, country, status) {
-    let query = await "exec sp_web_countries_update @id = '" + id + "', @country='" + country + "', @status='" + status + "';";
+async function updateprofileMenu(id, profileMenu, status) {
+    let query = await "exec sp_web_profile_menus_update @id = '" + id + "', @profileMenu='" + profileMenu + "', @status='" + status + "';";
     try {
         const connection = await new sql.ConnectionPool(config).connect();
-        const country = await connection
+        const profileMenu = await connection
             .request()
             .query(query)
             .then((dbData) => {
@@ -72,7 +72,7 @@ async function updateCountry(id, country, status) {
 
         connection.close();
 
-        return country;
+        return profileMenu;
 
     } catch (error) {
         return { error: true, message: error.message };
@@ -80,7 +80,7 @@ async function updateCountry(id, country, status) {
 };
 
 module.exports = {
-    getCountry,
-    addCountry,
-    updateCountry
+    getProfileMenu,
+    addProfileMenu,
+    updateProfileMenu
 };

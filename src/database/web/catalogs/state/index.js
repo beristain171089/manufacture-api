@@ -1,16 +1,16 @@
 const config = require("../../../config");
 const sql = require('mssql');
 
-async function getCountry(activos, countryId = 0, country = null) {
+async function getstate(activos, stateId = 0, state = null) {
     var activos
-    let query = "exec sp_web_countries_get @activated='" + activos + "', @countryId='" + countryId + "'";
-    if(country !=  null && country.trim() != '' ){
-        query += ", @country= '" + country + "'";
+    let query = "exec sp_web_states_get @activated='" + activos + "', @stateId='" + stateId + "'";
+    if(state !=  null && state.trim() != '' ){
+        query += ", @state= '" + state + "'";
     }
     query +=  ";";
     try {
         const connection = await new sql.ConnectionPool(config).connect();
-        const countries = await connection
+        const states = await connection
             .request()
             .query(query)
             .then((dbData) => {
@@ -24,18 +24,18 @@ async function getCountry(activos, countryId = 0, country = null) {
 
         connection.close();
 
-        return countries;
+        return states;
 
     } catch (error) {
         return { error: true, message: error.message };
     };
 };
 
-async function addCountry(country) {
-    let query = await "exec sp_web_countries_add @country='" + country + "';";
+async function addstate(state) {
+    let query = await "exec sp_web_states_add @state='" + state + "';";
     try {
         const connection = await new sql.ConnectionPool(config).connect();
-        const country = await connection
+        const state = await connection
             .request()
             .query(query)
             .then((dbData) => {
@@ -48,18 +48,18 @@ async function addCountry(country) {
 
         connection.close();
 
-        return country;
+        return state;
 
     } catch (error) {
         return { error: true, message: error.message };
     };
 };
 
-async function updateCountry(id, country, status) {
-    let query = await "exec sp_web_countries_update @id = '" + id + "', @country='" + country + "', @status='" + status + "';";
+async function updatestate(id, state, status) {
+    let query = await "exec sp_web_states_update @id = '" + id + "', @state='" + state + "', @status='" + status + "';";
     try {
         const connection = await new sql.ConnectionPool(config).connect();
-        const country = await connection
+        const state = await connection
             .request()
             .query(query)
             .then((dbData) => {
@@ -72,7 +72,7 @@ async function updateCountry(id, country, status) {
 
         connection.close();
 
-        return country;
+        return state;
 
     } catch (error) {
         return { error: true, message: error.message };
@@ -80,7 +80,7 @@ async function updateCountry(id, country, status) {
 };
 
 module.exports = {
-    getCountry,
-    addCountry,
-    updateCountry
+    getState,
+    addState,
+    updateState
 };

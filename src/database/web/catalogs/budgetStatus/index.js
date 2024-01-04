@@ -1,11 +1,11 @@
 const config = require("../../../config");
 const sql = require('mssql');
 
-async function getCountry(activos, countryId = 0, country = null) {
+async function getbudgetStatus(activos, budgetStatusId = 0, budgetStatus = null) {
     var activos
-    let query = "exec sp_web_countries_get @activated='" + activos + "', @countryId='" + countryId + "'";
-    if(country !=  null && country.trim() != '' ){
-        query += ", @country= '" + country + "'";
+    let query = "exec sp_web_budget_statuses_get @activated='" + activos + "', @budgetStatusId='" + budgetStatusId + "'";
+    if(budgetStatus !=  null && budgetStatus.trim() != '' ){
+        query += ", @budgetStatus= '" + budgetStatus + "'";
     }
     query +=  ";";
     try {
@@ -31,11 +31,11 @@ async function getCountry(activos, countryId = 0, country = null) {
     };
 };
 
-async function addCountry(country) {
-    let query = await "exec sp_web_countries_add @country='" + country + "';";
+async function addbudgetStatus(budgetStatus) {
+    let query = await "exec sp_web_budget_statuses_add @budgetStatus='" + budgetStatus + "';";
     try {
         const connection = await new sql.ConnectionPool(config).connect();
-        const country = await connection
+        const budgetStatus = await connection
             .request()
             .query(query)
             .then((dbData) => {
@@ -48,23 +48,23 @@ async function addCountry(country) {
 
         connection.close();
 
-        return country;
+        return budgetStatus;
 
     } catch (error) {
         return { error: true, message: error.message };
     };
 };
 
-async function updateCountry(id, country, status) {
-    let query = await "exec sp_web_countries_update @id = '" + id + "', @country='" + country + "', @status='" + status + "';";
+async function updatebudgetStatus(id, budgetStatus, status) {
+    let query = await "exec sp_web_budget_statuses_update @id = '" + id + "', @budgetStatus='" + budgetStatus + "', @status='" + status + "';";
     try {
         const connection = await new sql.ConnectionPool(config).connect();
-        const country = await connection
+        const budgetStatus = await connection
             .request()
             .query(query)
             .then((dbData) => {
                 if (dbData.recordset.length > 0) {
-                    return { error: false, data: dbData.recordset };
+                    return { Datetiem: dbData.recordset };
                 } else {
                     return { error: true, message: "NO FUE POSIBLE ACTUALIZAR EL REGISTRO" };
                 }
@@ -72,7 +72,7 @@ async function updateCountry(id, country, status) {
 
         connection.close();
 
-        return country;
+        return budgetStatus;
 
     } catch (error) {
         return { error: true, message: error.message };
@@ -80,7 +80,7 @@ async function updateCountry(id, country, status) {
 };
 
 module.exports = {
-    getCountry,
-    addCountry,
-    updateCountry
+    getBudgetStatus,
+    addBudgetStatus,
+    updateBudgetStatus
 };

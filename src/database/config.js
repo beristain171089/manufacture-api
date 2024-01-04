@@ -2,7 +2,8 @@ let config;
 
 if (process.env.NODE_ENV === "production") {
   config = {
-    server: "192.168.1.82",
+    //server: "192.168.1.82",
+    server: "localhost",
     port: 1433,
     database: "manufacture", 
     user: "sa",
@@ -13,7 +14,8 @@ if (process.env.NODE_ENV === "production") {
   };
 } else {
   config = {
-    server: "192.168.1.82",
+    //server: "192.168.1.82",
+    server: "localhost",
     port: 1433,
     database: "manufacture", 
     user: "sa",
