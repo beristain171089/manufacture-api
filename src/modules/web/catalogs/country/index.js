@@ -1,68 +1,68 @@
 const koaRouter = require("koa-router");
 const koaBody = require("koa-body");
-const utils = require("../../../utils");
+const utils = require("../../../../utils");
 const router = new koaRouter({ prefix: "/web" });
-const db = require("../../../database/web/catalogs/area");
+const db = require("../../../../database/web/catalogs/country");
 
-router.get("/area", koaBody(), async function (context) {
+router.get("/country", koaBody(), async function (context) {
     try {
         const active = context.params.active || '';
         const queryParams = context.request.query;
         const activated = utils.boolParseFunc(queryParams.activated);
-        const idarea =  parseInt(queryParams.idarea) || 0;
-        const area =  utils.IsNullOrEmpty(queryParams.area)? queryParams.area : null;
-        context.body = await db.getArea(activated, idarea, area);
+        const idCountry =  parseInt(queryParams.idCountry) || 0;
+        const country =  utils.IsNullOrEmpty(queryParams.country)? queryParams.country : null;
+        context.body = await db.getCountry(activated, idCountry, country);
 
     } catch (error) {
         context.body = { error: true, message: error.message };
     };
 });
 
-router.post("/area", koaBody(), async function (context) {
+router.post("/country", koaBody(), async function (context) {
     try {
         
         if(context.request.body == undefined || 
             context.request.body == null || 
-            context.request.body.area == undefined || 
-            context.request.body.area == null){
+            context.request.body.country == undefined || 
+            context.request.body.country == null){
                 context.status = 400;
                 return context.body = { error: true, message: "Ya existe registro" };
         }
-        var area = context.request.body.area.trim();
+        var country = context.request.body.country.trim();
         var header = context.request.header;
         var active = false;
-        var areaId = 0;
-        var resp = await db.getArea(active, areaId, area);
+        var countryId = 0;
+        var resp = await db.getCountry(active, countryId, country);
         if(resp.data.length > 0)
         {
             context.status = 409;
             return context.body = { error: true, message: "Ya existe registro" };
         }
 
-        context.body = await db.addArea(area);
+        context.body = await db.addCountry(country);
 
     } catch (error) {
         context.body = { error: true, message: error.message };
     };
 });
 
-router.put("/area/:id", koaBody(), async function (context) {
+router.put("/country/:id", koaBody(), async function (context) {
     try {
-        var areaId = parseInt(context.params.id);
+        var countryId = parseInt(context.params.id);
         if(context.request.body == undefined || 
             context.request.body == null || 
-            context.request.body.area == undefined || 
-            context.request.body.area == null ||
-            isNaN(areaId) && context.params.id  !== '' + areaId
+            context.request.body.country == undefined || 
+            context.request.body.country == null ||
+            isNaN(countryId) && context.params.id  !== '' + countryId
             ){
                 context.status = 400;
                 return context.body = { error: true, message: "Parámetros incorrectros" };
         }
-        var area = context.request.body.area.trim();
+        var country = context.request.body.country.trim();
         var status = context.request.body.status;
         var header = context.request.header;
 
-        context.body = await db.updateArea(areaId, area, status);
+        context.body = await db.updateCountry(countryId, country, status);
 
     } catch (error) {
         context.body = { error: true, message: error.message };
